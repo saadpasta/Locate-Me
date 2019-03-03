@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "QuizApp",
+    "description": "A very interesting project.",
+    "slug": "rn_Quiz",
+    "privacy": "public",
+    "sdkVersion": "31.0.0",
+    "platforms": ["ios", "android"],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#dfdfdf"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.midk123.quizApp",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyANkUfLBovPhWMJohvoCTbFbo3Rd7uPLSo"
+        }
+      }
+    }
+  }
+}
