@@ -18,18 +18,23 @@ import { authActions } from "../redux/actions/auth.actions";
 import { connect } from "react-redux";
 import CategoryView from "./CategoryView";
 import { GradientButton } from "../components/gradientButton";
+import { Permissions, Location, Marker, MapView } from "expo";
 
 const paddingValue = 8;
 
 class JoinCircle extends Component {
   static navigationOptions = {
-    title: "Create a Circle"
+    title: "Join a Circle"
   };
   constructor(props) {
     super(props);
     const screenWidth = Dimensions.get("window").width;
     this.state = {
-        code: ""
+      code: "",
+      location: {
+        latitude: 24.9048714,
+        longitude: 67.0782024
+      }
     };
     this.itemSize = {
       width: (screenWidth - paddingValue * 6) / 2,
@@ -43,13 +48,34 @@ class JoinCircle extends Component {
   JoinCircle = () => {
     let code = this.state.code;
     let user = this.props.auth.user;
-    this.props.JoinCircle(code, user);
+    let location = this.state.location
+    this.props.JoinCircle(code, user , location);
   };
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.currentCircle) {
       this.props.navigation.navigate("CircleInvite");
     }
   }
+
+  componentWillMount() {
+    this._getLocationAsync();
+  }
+
+  _getLocationAsync = async () => {
+    console.warn(1);
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    console.warn(status);
+    if (status !== "granted") {
+      this.setState({
+        errorMessage: "Permission to access location was denied"
+      });
+    } else {
+      let location = await Location.getCurrentPositionAsync({});
+      /*  this.setState({ location, condition: true }); */
+      console.warn("current location===", location);
+    }
+  };
+
   render() {
     return (
       <View style={styles.root}>
@@ -62,9 +88,7 @@ class JoinCircle extends Component {
           />
         </View>
         <View style={{ alignItems: "center" }}>
-          <RkButton  onPress={this.JoinCircle}>
-            Join
-          </RkButton>
+          <RkButton onPress={this.JoinCircle}>Join</RkButton>
         </View>
       </View>
     );
@@ -95,8 +119,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => {
   return {
-    JoinCircle: (code, user) => {
-      dispatch(authActions.JoinCircle(code, user));
+    JoinCircle: (code, user ,location ) => {
+      dispatch(authActions.JoinCircle(code, user ,location));
     }
   };
 };

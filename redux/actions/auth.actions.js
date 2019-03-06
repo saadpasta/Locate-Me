@@ -30,14 +30,14 @@ export const authActions = {
 };
 
 function updateLocation(location, id, code) {
-  console.warn(location, id, code)
+  console.warn(location, id, code);
   return dispatch => {
     db.collection("Circles")
       .doc(code)
       .collection("users")
       .where("id", "==", id)
       .set({
-        location:location
+        location: location
       })
       .then(function() {
         console.log("Document successfully written!");
@@ -50,7 +50,7 @@ function updateLocation(location, id, code) {
   };
 }
 
-function JoinCircle(code, user) {
+function JoinCircle(code, user, location) {
   return dispatch => {
     db.collection("Circles")
       .doc(code)
@@ -64,10 +64,16 @@ function JoinCircle(code, user) {
             .add({
               name: user.name,
               id: user.id,
-              picture: user.picture
+              picture: user.picture,
+              location: location
             })
             .then(function() {
               console.log("Document successfully written!");
+              const obj = {
+                circleName: doc.data().circleName,
+                code: doc.data().code
+              };
+              dispatch(success(obj));
             })
             .catch(function(error) {
               console.error("Error writing document: ", error);
@@ -81,6 +87,9 @@ function JoinCircle(code, user) {
         console.log("Error getting document:", error);
       });
   };
+  function success(circle) {
+    return { type: authConstants.CIRCLE_INFO, circle };
+  }
 }
 
 function currentCircle(code) {
@@ -162,7 +171,7 @@ function getcircles(userId) {
     return { type: authConstants.LOGIN_FAILURE, error };
   }
 }
-function createCircle(name, code, user) {
+function createCircle(name, code, user, location) {
   return dispatch => {
     db.collection("Circles")
       .doc(code)
@@ -179,7 +188,8 @@ function createCircle(name, code, user) {
           .add({
             name: user.name,
             id: user.id,
-            picture: user.picture
+            picture: user.picture,
+            location: location
           });
 
         console.log("Your Work Has Been Done Succesfully");
@@ -227,8 +237,7 @@ function loginFacebook(user) {
               picture: user.picture
             })
             .then(res => {
-              console.warn(res)
-              dispatch(success(res.user));
+              dispatch(success(user));
             })
             .catch(function(error) {
               console.log(error);

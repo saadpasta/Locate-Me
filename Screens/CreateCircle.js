@@ -14,6 +14,7 @@ import {
   RkTextInput
 } from "react-native-ui-kitten";
 import { FontIcons } from "../assets/icons";
+import { Permissions, Location, Marker, MapView } from "expo";
 import { authActions } from "../redux/actions/auth.actions";
 import { connect } from "react-redux";
 import CategoryView from "./CategoryView";
@@ -29,7 +30,11 @@ class CreateCircle extends Component {
     super(props);
     const screenWidth = Dimensions.get("window").width;
     this.state = {
-      circleName: ""
+      circleName: "",
+      location: {
+        latitude: 24.9048714,
+        longitude: 67.0782024
+      }
     };
     this.itemSize = {
       width: (screenWidth - paddingValue * 6) / 2,
@@ -40,19 +45,41 @@ class CreateCircle extends Component {
     title: "Create your circle"
   };
 
+  componentWillMount() {
+    this._getLocationAsync();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.currentCircle1) {
+      this.props.navigation.navigate("CircleInvite");
+    }
+  }
+
+  _getLocationAsync = async () => {
+    console.warn(1);
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    console.warn(status);
+    if (status !== "granted") {
+      this.setState({
+        errorMessage: "Permission to access location was denied"
+      });
+    } else {
+      let location = await Location.getCurrentPositionAsync({});
+      /*  this.setState({ location, condition: true }); */
+      console.warn("current location===", location);
+    }
+  };
+
   CreateCircle = () => {
     let name = this.state.circleName;
     let code = Math.random()
       .toString(36)
       .substring(7);
     let user = this.props.auth.user;
-    this.props.createCircle(name, code, user);
+    let location = this.state.location;
+    this.props.createCircle(name, code, user, location);
   };
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.auth.currentCircle1) {
-      this.props.navigation.navigate("CircleInvite");
-    }
-  }
+
   render() {
     return (
       <View style={styles.root}>
@@ -98,8 +125,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => {
   return {
-    createCircle: (name, code, user) => {
-      dispatch(authActions.createCircle(name, code, user));
+    createCircle: (name, code, user , location) => {
+      dispatch(authActions.createCircle(name, code, user , location));
     }
   };
 };

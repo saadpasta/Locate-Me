@@ -48,7 +48,9 @@ class CircleInvite extends Component {
       this.props.navigation.navigate("Home");
     } */
   }
-
+  onsendPress = () =>{
+    this.props.navigation.navigate("Home");
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -66,7 +68,7 @@ class CircleInvite extends Component {
         <GradientButton
           style={styles.save}
           rkType="large"
-          onPress={this.onLoginButtonPressed}
+          onPress={this.onsendPress}
           text="SEND"
         />
         <View style={styles.footer}>

@@ -53,9 +53,11 @@ class HomeScreen extends Component {
     if (nextProps.auth.currentCircle) {
       this.props.navigation.navigate("Map");
     }
-    this.setState({
-      circles: nextProps.auth.yourCircles
-    });
+    if (nextProps.auth.yourCircles) {
+      this.setState({
+        circles: nextProps.auth.yourCircles
+      });
+    }
   }
 
   CreateCircle = () => {
@@ -83,7 +85,10 @@ class HomeScreen extends Component {
           onPress={this.joinCircle}
           text="Join Circle"
         />
-        <ScrollView contentContainerStyle={styles.rootContainer} scrollEventThrottle={16}>
+        <ScrollView
+          contentContainerStyle={styles.rootContainer}
+          scrollEventThrottle={16}
+        >
           {this.state.circles.map((v, i) => {
             return (
               <RkButton
@@ -138,7 +143,7 @@ const mapDispatchToProps = dispatch => {
 
     getCircles: userId => {
       dispatch(authActions.getcircles(userId));
-    },
+    }
   };
 };
 

@@ -31,7 +31,7 @@ class LoginScreen extends Component {
         expires,
         permissions,
         declinedPermissions
-      } = await Expo.Facebook.logInWithReadPermissionsAsync("600508263680717", {
+      } = await Expo.Facebook.logInWithReadPermissionsAsync("408451776574589", {
         permissions: ["public_profile"]
       });
       if (type === "success") {

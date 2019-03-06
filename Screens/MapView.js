@@ -25,7 +25,7 @@ class MapScreen extends Component {
   }
 
   componentWillMount() {
-    const circle = this.props.auth.viewCicle;
+    const circle = this.props.auth.currentCircle;
     console.warn(circle);
     this.setState({
       circle: circle
@@ -44,15 +44,15 @@ class MapScreen extends Component {
 
     let location = await Location.getCurrentPositionAsync({});
     this.setState({ location, condition: true });
-    console.log("current location===", location);
+    console.warn("current location===", location);
     const id = this.props.auth.user.id;
   };
 
   render() {
-    this.props.updateLocation(
+    /*      this.props.updateLocation(
       this.state.location,
       this.props.auth.user.id,
-      this.props.auth.viewCicle)
+      this.props.auth.viewCicle) */
     return (
       <View style={{ flex: 1 }}>
         <MapView
@@ -64,16 +64,18 @@ class MapScreen extends Component {
             longitudeDelta: 0.0421
           }}
         >
+       {this.state.circle.map((v, i) => {
+            return (
           <MapView.Marker
-            coordinate={this.state.location.coords}
-            title="My Marker"
-            description="Some description"
+            coordinate={v.location}
+            title={v.name}
+            description=""
             ref={marker => {
               this.marker = marker;
             }}
             flat
           >
-            {/* <Image
+            { <Image
               style={{
                 height: 50,
                 width: 50,
@@ -81,10 +83,12 @@ class MapScreen extends Component {
               }}
               source={{
                 uri:
-                  this.state.circle.users.picture
+                  v.picture
               }}
-            /> */}
+            /> }
           </MapView.Marker>
+            );
+          })}
         </MapView>
       </View>
     );

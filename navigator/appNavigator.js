@@ -46,7 +46,6 @@ const stackNavigator = createStackNavigator({
   Home: {
     screen: HomeScreen
   },
-
   Dashboard: {
     screen: Dashboard
   },
