@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Image, Dimensions, Keyboard, StyleSheet } from "react-native";
+import {
+  View,
+  Image,
+  Dimensions,
+  Keyboard,
+  StyleSheet,
+  AsyncStorage
+} from "react-native";
 import {
   RkButton,
   RkText,
@@ -23,7 +30,49 @@ class LoginScreen extends Component {
 
   loginWithFb = async () => {
     this.setState({ loading: true });
-    try {
+    const value = await AsyncStorage.getItem("user");
+    if (value !== null) {
+      this.props.loginFacebook(JSON.parse(value));
+      console.log(value);
+    } else {
+      console.log(1);
+      try {
+        // const db = firebase.firestore();
+        const {
+          type,
+          token,
+          expires,
+          permissions,
+          declinedPermissions
+        } = await Expo.Facebook.logInWithReadPermissionsAsync(
+          "408451776574589",
+          {
+            permissions: ["public_profile"]
+          }
+        );
+        if (type === "success") {
+          // Get the user's name using Facebook's Graph API
+          const response = await fetch(
+            `https://graph.facebook.com/me?access_token=${token}&fields=id,name,email,picture.type(large)`
+          );
+          const userObj = await response.json();
+          console.log(userObj);
+          const user = {
+            id: userObj.id,
+            name: userObj.name,
+            picture: userObj.picture.data.url
+          };
+          await AsyncStorage.setItem("user", JSON.stringify(user));
+          this.props.loginFacebook(user);
+        } else {
+          // type === 'cancel'
+        }
+      } catch ({ message }) {
+        alert(`Facebook Login Error: ${message}`);
+      }
+    }
+
+    /*     try {
       // const db = firebase.firestore();
       const {
         type,
@@ -52,7 +101,7 @@ class LoginScreen extends Component {
       }
     } catch ({ message }) {
       alert(`Facebook Login Error: ${message}`);
-    }
+    } */
   };
 
   getThemeImageSource = theme =>

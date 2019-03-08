@@ -31,11 +31,6 @@ class HomeScreen extends Component {
       height: (screenWidth - paddingValue * 6) / 2
     };
   }
-  static navigationOptions = {
-    title: "Your Circles",
-    headerLeft: null
-  };
-
   goToCateogory = name => {
     const skill = name;
     console.log(skill);
