@@ -19,7 +19,7 @@ import { connect } from "react-redux";
 import CategoryView from "./CategoryView";
 import { GradientButton } from "../components/gradientButton";
 import { Permissions, Location, Marker, MapView } from "expo";
-
+  
 const paddingValue = 8;
 
 class JoinCircle extends Component {

@@ -16,26 +16,32 @@ import LoginScreen from "../Screens/LoginScreen";
 import Dashboard from "../Screens/Dashboard";
 import SignUp from "../Screens/SignUp";
 import CategoryViewScreen from "../Screens/CategoryView";
-import Profile from "../Screens/counselorProfile";
 import MapScreen from "../Screens/MapView";
 import OrderConfirm from "../Screens/OrderConfirm";
 import CreateCircle from "../Screens/CreateCircle";
 import CircleInvite from "../Screens/CircleInvite";
 import JoinCircle from "../Screens/JoinCircle";
+import Home from "../Screens/ViewCircles"
+import Profile from "../Screens/Profile"
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
 // import { createMaterialTopNavigator , createDrawerNavigator, createAppContainer} from 'react-navigation'
 
 const stackNavigator = createStackNavigator({
-
   Login: {
     screen: LoginScreen
   },
-  Map: {
-    screen: MapScreen
+  Main:{
+    screen:HomeScreen
+  },
+  Home: {
+    screen: Home
   },
   JoinCircle: {
     screen: JoinCircle
+  },
+  Map: {
+    screen: MapScreen
   },
   CircleInvite: {
     screen: CircleInvite
@@ -43,9 +49,7 @@ const stackNavigator = createStackNavigator({
   CreateCircle: {
     screen: CreateCircle
   },
-  Home: {
-    screen: HomeScreen
-  },
+
   Dashboard: {
     screen: Dashboard
   },
@@ -55,12 +59,11 @@ const stackNavigator = createStackNavigator({
   Category: {
     screen: CategoryViewScreen
   },
-  CounselorProfile: {
-    screen: Profile
-  },
-
   OrderConfirm: {
     screen: OrderConfirm
+  },
+  Profile:{
+    screen:Profile
   }
 });
 

@@ -19,12 +19,12 @@ import { authActions } from "../redux/actions/auth.actions";
 import { connect } from "react-redux";
 import CategoryView from "./CategoryView";
 import { GradientButton } from "../components/gradientButton";
-
+import { Icon, Input, ListItem, Header, Avatar } from "react-native-elements";
 const paddingValue = 8;
 
 class CreateCircle extends Component {
   static navigationOptions = {
-    title: "Create a Circle"
+    header: null
   };
   constructor(props) {
     super(props);
@@ -41,9 +41,6 @@ class CreateCircle extends Component {
       height: (screenWidth - paddingValue * 6) / 2
     };
   }
-  static navigationOptions = {
-    title: "Create your circle"
-  };
 
   componentWillMount() {
     this._getLocationAsync();
@@ -83,6 +80,33 @@ class CreateCircle extends Component {
   render() {
     return (
       <View style={styles.root}>
+        <Header
+          key={123}
+          backgroundColor="#ff6d20"
+          leftComponent={
+            <Icon
+              onPress={() => this.props.navigation.goBack()}
+              name="chevron-left"
+              type="font-awesome"
+              size={30}
+              color="#fff"
+            />
+          }
+          centerComponent={{
+            text: "Create Your Circle",
+            style: { fontSize: 20, fontWeight: "bold", color: "#fff" }
+          }}
+          rightComponent={
+            <Avatar
+              rounded
+              size="medium"
+              source={{
+                uri: this.props.auth.user.picture
+              }}
+              onPress={() => this.props.navigation.navigate("Profile")}
+            />
+          }
+        />
         <View style={{ alignItems: "center" }}>
           <RkText rkType="h3">Enter your circle name</RkText>
           <RkTextInput
@@ -102,9 +126,7 @@ class CreateCircle extends Component {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    padding: 8
-  },
+  root: {},
   rootContainer: {
     flexDirection: "row",
     flexWrap: "wrap"
@@ -125,8 +147,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => {
   return {
-    createCircle: (name, code, user , location) => {
-      dispatch(authActions.createCircle(name, code, user , location));
+    createCircle: (name, code, user, location) => {
+      dispatch(authActions.createCircle(name, code, user, location));
     }
   };
 };

@@ -17,7 +17,7 @@ import {
 
 const paddingValue = 8;
 
-class HomeScreen extends Component {
+class Home extends Component {
   static navigationOptions = {
     header: null
   };
@@ -43,9 +43,6 @@ class HomeScreen extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    /*    if (nextProps.auth.data) {
-      this.props.navigation.navigate("Category");
-    } */
     if (nextProps.auth.currentCircle) {
       this.props.navigation.navigate("Map");
     }
@@ -66,9 +63,6 @@ class HomeScreen extends Component {
   joinCircle = () => {
     this.props.navigation.navigate("JoinCircle");
   };
-  viewcircles = () => {
-    this.props.navigation.navigate("Home");
-  };
   render() {
     return (
       <View style={styles.root}>
@@ -77,6 +71,7 @@ class HomeScreen extends Component {
           backgroundColor="#ff6d20"
           leftComponent={
             <Icon
+              onPress={() => this.props.navigation.openDrawer()}
               name="menu"
               size={30}
               color="#fff"
@@ -93,57 +88,29 @@ class HomeScreen extends Component {
               source={{
                 uri: this.props.auth.user.picture
               }}
-              onPress={() => this.props.navigation.navigate("Profile")}
             />
           }
-        />
-        <ScrollView>
-          <View style={{ margin: 10, padding: 10 }}>
-            <GradientButton
-              style={styles.save}
-              rkType="large"
-              onPress={this.CreateCircle}
-              text="Create  Circle"
-            />
-          </View>
-          <View style={{ margin: 10, padding: 10 }}>
-            <GradientButton
-              style={styles.save}
-              rkType="large"
-              onPress={this.joinCircle}
-              text="Join Circle"
-            />
-          </View>
-
-          <View style={{ margin: 10, padding: 10 }}>
-            <GradientButton
-              style={styles.save}
-              rkType="large"
-              onPress={() => this.props.navigation.navigate("CircleInvite")}
-              text="Circle Invite"
-            />
-          </View>
-
-          <View contentContainerStyle={styles.rootContainer}>
-            {this.state.circles.map((v, i) => {
-              return (
-                <RkButton
-                  rkType="square shadow"
-                  style={{ ...this.itemSize }}
-                  key={i}
-                  onPress={() => this.goToCircle(v.code)}
-                >
-                  <RkText style={styles.icon} rkType="primary moon xxlarge">
-                    {FontIcons.navigation}
-                  </RkText>
-                  <RkText>{v.circleName}</RkText>
-                  <RkText>{v.code}</RkText>
-                </RkButton>
-              );
-            })}
-            
-          </View>
-          <View style={{marginBottom:20,marginTop:100}}></View>
+        /> 
+        <ScrollView
+          contentContainerStyle={styles.rootContainer}
+          scrollEventThrottle={16}
+        >
+          {this.state.circles.map((v, i) => {
+            return (
+              <RkButton
+                rkType="square shadow"
+                style={{ ...this.itemSize }}
+                key={i}
+                onPress={() => this.goToCircle(v.code)}
+              >
+                <RkText style={styles.icon} rkType="primary moon xxlarge">
+                  {FontIcons.article}
+                </RkText>
+                <RkText>{v.circleName}</RkText>
+                <RkText>{v.code}</RkText>
+              </RkButton>
+            );
+          })}
         </ScrollView>
       </View>
     );
@@ -152,15 +119,12 @@ class HomeScreen extends Component {
 
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: "#e5e5e5"
   },
   rootContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     padding: 8,
-    backgroundColor: "#e5e5e5",
-    justifyContent: 'space-around'
-
+    backgroundColor: "#e5e5e5"
   },
 
   icon: {
@@ -192,4 +156,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(HomeScreen);
+)(Home);
